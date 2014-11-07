@@ -1,4 +1,73 @@
-syntax on
+" Pathogen code
+filetype off
+call pathogen#runtime_append_all_bundles()
+call pathogen#helptags()
 
-" Wrap gitcommit file types at the appropriate length
-filetype indent plugin on
+" Color schemes
+set t_Co=256
+"colorscheme jellybeans    " Closest to Aptana color scheme I've found
+colorscheme aptana
+
+" Editor widgets
+set rnu
+set title
+set cursorline
+map <leader>td <Plug>TaskList
+
+" Key mappings
+let mapleader=","
+nnoremap ; :
+cmap w!! w !sudo tee % >/dev/null
+imap jj <esc>
+map <leader>vr :so $MYVIMRC<cr>
+inoremap <A-h> <C-o>h    " hjkl movement in i-mode
+inoremap <A-j> <C-o>j
+inoremap <A-k> <C-o>k
+inoremap <A-l> <C-o>l
+set backspace=indent,eol,start
+
+" Code folding
+set foldmethod=indent
+set foldlevel=99
+map <leader>f za
+
+" Window control
+map <c-j> <c-w>j
+map <c-k> <c-w>k
+map <c-l> <c-w>l
+map <c-h> <c-w>h
+map + <c-w>+
+map - <c-w>-
+
+" Buffer control
+map <leader><tab> :bn<cr>
+
+" File syntax
+syntax on                    " syntax highlighing
+filetype on                  " try to detect filetypes
+filetype plugin indent on    " enable loading indent file for filetype
+
+" Python autocompletion
+au FileType python set omnifunc=pythoncomplete#Complete
+let g:SuperTabDefaultCompletionType = "context"
+set completeopt=menuone,longest,preview
+"let g:pyflakes_use_quickfix = 0
+let g:pep8_map='<leader>8'
+
+" Formatting
+set tabstop=4
+set shiftwidth=4
+set smarttab
+set expandtab
+set softtabstop=4
+set autoindent
+autocmd FileType html setlocal shiftwidth=2 tabstop=2 " Formatting for HTML files only.
+
+" Show syntax highlighting groups for word under cursor
+nmap <leader>sh :call <SID>SynStack()<CR>
+function! <SID>SynStack()
+  if !exists("*synstack")
+    return
+  endif
+  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc
